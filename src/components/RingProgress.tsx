@@ -1,11 +1,12 @@
 import { View } from 'react-native'
-import SVG, { Circle } from 'react-native-svg'
+import SVG, { Circle, CircleProps } from 'react-native-svg'
 import Animated, {
 	useAnimatedProps,
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated'
 import { useEffect } from 'react'
+import { AntDesign } from '@expo/vector-icons'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle)
 
@@ -35,6 +36,18 @@ export const RingProgress = ({
 		strokeDasharray: [circumference * fill.value, circumference],
 	}))
 
+	const circleDefaultProps: CircleProps = {
+		cx: radius,
+		cy: radius,
+		r: innerRadius,
+		strokeWidth: strokeWidth,
+		stroke: color,
+		strokeLinecap: 'round',
+		originX: radius,
+		originY: radius,
+		rotation: '-90',
+	}
+
 	return (
 		<View
 			style={{
@@ -45,28 +58,20 @@ export const RingProgress = ({
 		>
 			<SVG>
 				{/*Progress*/}
-				<AnimatedCircle
-					animatedProps={animatedProps}
-					cx={radius}
-					cy={radius}
-					r={innerRadius}
-					strokeWidth={strokeWidth}
-					stroke={color}
-					strokeLinecap="round"
-					rotation="-90"
-					originX={radius}
-					originY={radius}
-				/>
+				<AnimatedCircle animatedProps={animatedProps} {...circleDefaultProps} />
 				{/*Background*/}
-				<Circle
-					cx={radius}
-					cy={radius}
-					r={innerRadius}
-					strokeWidth={strokeWidth}
-					stroke={color}
-					opacity={0.2}
-				/>
+				<Circle {...circleDefaultProps} opacity={0.2} />
 			</SVG>
+			<AntDesign
+				name="arrowright"
+				size={strokeWidth * 0.8}
+				color="black"
+				style={{
+					position: 'absolute',
+					alignSelf: 'center',
+					top: strokeWidth * 0.1,
+				}}
+			/>
 		</View>
 	)
 }
